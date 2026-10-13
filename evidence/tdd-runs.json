@@ -84,17 +84,6 @@
     ]
   },
   {
-    "file": "final-coverage.log",
-    "repository": "synkro-customers-portal",
-    "sha256": "1854D717D9B7EAD4DA3990868C0D02C42E9018163C1E5A00617D6765629A0C34",
-    "summary": [
-      "Test Files  4 passed (4)",
-      "Tests  20 passed (20)",
-      "Start at  21:50:38",
-      "Statements   : 81.84% ( 487/595 )"
-    ]
-  },
-  {
     "file": "customers-contract-red.log",
     "repository": "synkro-front",
     "sha256": "6A7E1E828D10B868030ABD2F77F3AC5298093D3F7D66DC92401498AB68B3F25B",
@@ -165,5 +154,26 @@
     ],
     "sha256": "427F825B2A170354FCCEE69A9F735C26138620AD0529EA6341ACDC6B8BEBF3D1",
     "file": "customers-host-final-coverage.log"
+  },
+  {
+    "summary": [
+      "Test Files  1 failed | 3 passed (4)",
+      "Tests  1 failed | 21 passed (22)",
+      "Start at  22:06:50"
+    ],
+    "repository": "synkro-customers-portal",
+    "file": "route-write-red.log",
+    "sha256": "B8112BDC6534E31C11128E44F684DC504307ADE8EA9B4C5FC25EFF4435A14D35"
+  },
+  {
+    "summary": [
+      "Test Files  4 passed (4)",
+      "Tests  22 passed (22)",
+      "Start at  22:07:24",
+      "Statements   : 81.87% ( 488/596 )"
+    ],
+    "repository": "synkro-customers-portal",
+    "file": "route-write-green.log",
+    "sha256": "1E060B482783E60A75BF2E1A0F8708F57AE06618753EB9F2AE7C175B70BD4AA8"
   }
 ]
