@@ -1,0 +1,55 @@
+{
+  "scope": "Actual browser, Host, Gateway, Auth, Customers API and disposable PostgreSQL; no API response doubles",
+  "revisions": {
+    "synkro-customers-portal": "7e354935598c8151d644f9e2e72b35acf2280ca2",
+    "synkro-front": "2174bdae341aa8f7ccb493bbe76850fb939849fb",
+    "synkro-customers-api": "58a0ef9f6fc05b788b2e65002468cd9c14783540",
+    "synkro-auth-api": "04ae6ab92daf474fb5c38ae37842d1690e7584b0",
+    "synkro-auth-db": "5e481dba156db6f2febb00427efba637002d9a0c",
+    "synkro-customers-db": "a23ba04f94ff0f150c5bafd9801cc0c6d9e98bd7",
+    "synkro-auth-portal": "02e71fcab39a98aa14a082c68957e750c35347c0",
+    "synkro-api-gateway": "24a4ab157bb000e152e5e4567f16deb3ebadcf05",
+    "synkro-sales-portal": "d88babf9cd5a95bd7fb6cbae3a0db642c8df285f",
+    "synkro-products-portal": "31f1dc235e50c69030c60f5d5faca5d2c1786270"
+  },
+  "imageIds": {
+    "synkro-auth-api": "sha256:b884b6f46f7d06e7c23046c8b27742322630afe40f5d6976f4f9b99c14933259",
+    "synkro-customers-api": "sha256:a8507714e292b00fb989a0f0624348cbe5ee7af20c235d2e86d058fbc4dd7b19",
+    "synkro-api-gateway": "sha256:50f32fad1a9a36b01ecf23fbde72dbd1edb5f6bed99f695271ee9e73e3cbffb7",
+    "synkro-customers-portal": "sha256:e76c590e8e96836aa14c3a1a483558a4d76ad6b72a8aefeab7e265acbae926a3",
+    "synkro-auth-portal": "sha256:90cd94856f92e7b5a1ee7cc545f4b49cbae3441f7e5c7f12693440ffffe4ac53",
+    "synkro-products-portal": "sha256:fc11538a8e6bc114698f3cbb5e2a8369ba9751ddb471c2e4c3228eee7d18b38a",
+    "synkro-sales-portal": "sha256:c97531fc92d58d97cadbae5a79ad4491c6f104347197caed33d67326ebf7166a",
+    "synkro-front": "sha256:bf88bba6156858c51b0081ab7ac76b4539080b49bc1d36b3844b03d493cc98fc"
+  },
+  "checks": {
+    "loginRestore": "PASS",
+    "createdCustomer": "49ce0129-2d03-4929-b172-b69bee5057de",
+    "idempotentUncertainRetry": "PASS",
+    "detailAndReplacement": "PASS",
+    "deepLinkRefresh": "PASS",
+    "exactDocumentSearch": "PASS",
+    "backForward": "PASS",
+    "logicalDeleteAndReservedDocument": "PASS",
+    "stableEntryAndHashedAssets": "PASS",
+    "salespersonCreate": "PASS",
+    "inventoryDenied": "PASS",
+    "mobile": "PASS",
+    "salesWarmOutage": {
+      "status": 502,
+      "seconds": 2.01
+    },
+    "salesAssetRecovery": "PASS",
+    "customersWarmOutage": {
+      "status": 502,
+      "seconds": 2.008
+    },
+    "browserPortalRecovery": "PASS",
+    "customersAssetRecovery": "PASS",
+    "noUncaughtBrowserErrors": "PASS"
+  },
+  "owner": "customers-browser-d1f0416479d447868c2ffe238b14b25f",
+  "browserVersion": "154.0.8037.98",
+  "status": "PASS",
+  "cleanup": "PASS"
+}

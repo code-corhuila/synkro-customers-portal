@@ -1,0 +1,5 @@
+# Optional release overlay: operator-owned persistent asset archive, no new ports.
+services:
+  synkro-customers-portal:
+    volumes:
+      - ${CUSTOMERS_ASSETS_DIR:?Provide the published assets directory}:/usr/share/nginx/html:ro

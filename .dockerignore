@@ -1,0 +1,12 @@
+.git
+node_modules
+dist
+build
+coverage
+.angular
+.reference
+.acceptance
+evidence
+*.log
+audit.json
+*.env
