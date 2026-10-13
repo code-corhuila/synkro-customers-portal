@@ -144,7 +144,7 @@ try {
   console.log('Warm-cache proxy: stopped Sales and stopped Customers, controlled delivery and recovery');
   for(const [name,container,path] of [['sales',sales,'/remotes/sales/assets/remoteEntry.js'],['customers',portal,'/remotes/customers/remoteEntry.js']]) {
     for(let i=0;i<80;i++)assert.equal((await fetch(origin+path)).status,200);
-    docker(['stop','--time','10',container]);const started=Date.now();const stopped=await fetch(origin+path,{signal:AbortSignal.timeout(15000)});assert.equal(stopped.status,502);
+    docker(['stop','--time','10',container]);const started=Date.now();const stopped=await fetch(origin+path,{signal:AbortSignal.timeout(15000)});assert.equal(stopped.status,502);assert.match(stopped.headers.get('cache-control'),/no-store/);
     checks[name+'WarmOutage']={status:502,seconds:(Date.now()-started)/1000};assert.equal((await fetch(origin+'/customers')).status,200);assert.equal((await fetch(origin+'/remotes/products/assets/remoteEntry.js')).status,200);
     if(name==='customers') {
       await page.reload();await expect(page.getByText('Este módulo no está disponible en este momento.',{exact:true})).toBeVisible();

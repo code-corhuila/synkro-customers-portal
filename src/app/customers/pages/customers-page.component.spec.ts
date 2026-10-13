@@ -36,6 +36,11 @@ async function click(f:ComponentFixture<CustomersPageComponent>,text:string) {
   expect(button,`button ${text}`).toBeDefined(); button.click(); f.detectChanges(); await settle(f);
 }
 describe('CLI-UI-03/04/05 list',()=>{
+  it('keeps Host heading styles from changing the explanatory copy',async()=>{
+    const hostStyle=document.createElement('style');hostStyle.textContent='.heading {text-transform:uppercase;font-family:"Host heading"}';document.head.append(hostStyle);
+    try {const {el}=await setup();expect(getComputedStyle(el.querySelector('header')!).textTransform).not.toBe('uppercase');}
+    finally {hostStyle.remove();}
+  });
   it('shows contractual data including inactive rows and omits active when all selected',async()=>{
     const {fixture,el,request}=await setup('list',vi.fn().mockResolvedValue(page([customer,{...customer,customerId:'b',name:'Inactivo',active:false}])));
     expect(el.textContent).toContain('Ana'); expect(el.textContent).toContain('Inactivo'); expect(el.textContent).toContain('DOC');

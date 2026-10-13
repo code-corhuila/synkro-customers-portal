@@ -17,8 +17,10 @@ Host `a1fecc671ada1384dcaeeec5f59dff3c13a35e26`, Auth Portal
 `02e71fcab39a98aa14a082c68957e750c35347c0`, infrastructure
 `02643d5c52042f61c67f101a394ca11ff6049efa` (Customers handoff reviewed).
 Portal starts at `875b269d217f17568b8125c4fd805e825f01867d` with common files only.
-Host remote branch `codex/sales-upstream-timeout` has an unmerged correction
-`24d5368`; preserve it and report it separately, do not attribute it to develop.
+At initial inspection, Host remote branch `codex/sales-upstream-timeout` had an
+unmerged correction `24d5368`. Subsequently develop
+`0e4b8ac7768a1416bdf9513f78a21054e4c22e69` incorporated it; the integration branch
+merged develop normally at `a56e5ba9e849238c29e6a7e625fac029069d6163` without conflicts.
 
 ## Screens, API and state
 
