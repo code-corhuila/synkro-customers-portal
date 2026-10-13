@@ -119,6 +119,15 @@ describe('CLI-UI-08/09/10/13 detail and writes',()=>{
     const {fixture,el}=await setup('edit',request);await click(fixture,'Guardar cambios');
     expect(el.textContent).toContain('no encontrado o inactivo');expect(el.querySelector('customer-form')).toBeNull();
   });
+  it('cancels a pending write when the owned route changes and enables the next customer',async()=>{
+    let complete!:(value:Customer)=>void;
+    const request=vi.fn().mockResolvedValueOnce(customer).mockImplementationOnce(()=>new Promise<Customer>(r=>complete=r)).mockResolvedValue({...customer,customerId:'b',name:'Otra persona'});
+    const {fixture,shell}=await setup('edit',request);await click(fixture,'Guardar cambios');
+    expect(fixture.componentInstance.pending()).toBe(true);const signal=request.mock.calls[1][2].signal;
+    const route=TestBed.inject(ActivatedRoute);(route.paramMap as BehaviorSubject<ReturnType<typeof convertToParamMap>>).next(convertToParamMap({id:'b'}));await settle(fixture);
+    expect(signal.aborted).toBe(true);expect(fixture.componentInstance.pending()).toBe(false);
+    expect(fixture.componentInstance.customer()?.customerId).toBe('b');complete(customer);await settle(fixture);expect(shell.navigate).not.toHaveBeenCalled();
+  });
   it('requires a keyboard-accessible confirmation before logical deactivation',async()=>{
     vi.spyOn(HTMLDialogElement.prototype,'showModal').mockImplementation(function(this:HTMLDialogElement){this.setAttribute('open','');});
     vi.spyOn(HTMLDialogElement.prototype,'close').mockImplementation(function(this:HTMLDialogElement){this.removeAttribute('open');});
