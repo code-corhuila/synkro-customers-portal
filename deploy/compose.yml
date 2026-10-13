@@ -1,0 +1,10 @@
+services:
+  synkro-customers-portal:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    networks: [platform]
+    expose: ["80"]
+networks:
+  platform:
+    external: true
