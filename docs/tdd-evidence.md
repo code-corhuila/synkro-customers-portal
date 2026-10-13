@@ -18,6 +18,7 @@ los resúmenes y hashes se conservan en `evidence/tdd-runs.json` para auditoría
 | Límites de Customers | `customers-warm-red.log`: falta resolver_timeout de Customers, 2 verdes | límites preservados de Sales y añadidos de Customers |
 | Cache de fallos Customers | `customers-cache-red.log`: falta interceptar 502 | suite completa Host: 339 verdes, 3 todo preexistentes |
 | Aislamiento visual | `styles-red.log`: texto hereda uppercase de Host, 20 verdes | `styles-green.log`: 21 verdes, cobertura 81,84 % |
+| Cambio de ruta durante PUT | `route-write-red.log`: conserva pending después de cancelar, 21 verdes | `route-write-green.log`: 22 verdes, solicitud abortada y respuesta tardía ignorada; cobertura 81,87 % |
 
 Limitaciones: los cambios de instalación/configuración tuvieron fallos de entorno
 y compilación que no cuentan como rojo funcional. Algunas aserciones adicionales

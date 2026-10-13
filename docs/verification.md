@@ -9,8 +9,8 @@ Angular, tokens, almacenamiento de sesión ni transporte API propios.
 
 | Repositorio | Rama de entrega | SHA de código ejecutado en navegador e imagen |
 |---|---|---|
-| synkro-customers-portal | feat/customers-management-portal | `216e3793296e6315b5abb45cb402621ba1498563` |
-| synkro-front | feat/customers-portal-integration | `80211842ad444c7cc0100503506ab8f835ec0d7b` |
+| synkro-customers-portal | feat/customers-management-portal | `7e354935598c8151d644f9e2e72b35acf2280ca2` |
+| synkro-front | feat/customers-portal-integration | `2174bdae341aa8f7ccb493bbe76850fb939849fb` |
 
 Los commits posteriores contienen informe, evidencia y documentación; no cambian
 los archivos de construcción o ejecución. El SHA final publicado se obtiene con
@@ -47,7 +47,7 @@ aceptación completa de plataforma HU-INF-02.
 | 14 Aislamiento | PASS | Host deadline/error/retry tests; imágenes reales, caída y recuperación de assets de ambos portales; Customers remonta con botón sin refresh |
 | 15 Accesibilidad | PASS | labels, mensajes asociados, foco de título/validación/dialog y controles nativos; regresión de colisión CSS Host; capturas móvil/español y tokens |
 | 16 Despliegue | PASS | imágenes reales Docker de ambos SHA; compose config y overlay; DNS/80/red externa/sin ports; entrada no-store, JS hash immutable, preservación de bundles probada |
-| 17 Testing/CI | PASS | 21 Angular + 3 Node; 81,84 % global/per-component >=70; Host 339 + 3 todo previos, 94,70 %; instalación/lint/tipos/build y CI en verde |
+| 17 Testing/CI | PASS | 22 Angular + 3 Node; 81,87 % global/per-component >=70; Host 339 + 3 todo previos, 94,70 %; instalación/lint/tipos/build y CI en verde |
 | 18 Aceptación real | PASS | browser-result.json y tres capturas, Chrome 154.0.8037.98; servicios reales con Postgres tmpfs exclusivo y usuarios/claves efímeros |
 | 19 Handoff | PASS | design.md, tdd-evidence.md, review-plan.md, infrastructure-handoff.md; variables/rutas/red/DNS/puerto/comandos y selección posterior de merges |
 
@@ -55,8 +55,8 @@ aceptación completa de plataforma HU-INF-02.
 
 Portal: `npm ci`, lint, tipos, coverage, `node --test scripts/*.test.mjs`, build,
 boundary compilado, configuración Compose base/overlay y Docker PASS. Cobertura:
-81,84 % statements, 82,96 % branches, 80,68 % functions, 95,26 % lines.
-Componentes: raíz 92,30 %, formulario 97,95 %, página 77,59 %; servicio 95 %.
+81,87 % statements, 83,59 % branches, 80,68 % functions, 95,26 % lines.
+Componentes: raíz 92,30 %, formulario 97,95 %, página 77,64 %; servicio 95 %.
 Instalación desde lockfile con Node 22.23.3; audit: 0 vulnerabilidades.
 
 Host: instalación desde lockfile, lint, coverage, tipos mediante build y chequeo
@@ -78,8 +78,8 @@ una suite con dobles equivalente a aceptación real.
 Resultado final PASS para los dos SHA de código anteriores. Participantes exactos
 en JSON: Auth API/DB, Customers API/DB, Gateway, Auth/Products/Sales portales.
 Se ejecutó desde snapshots Git inmutables, sin cambiar sus checkouts.
-Sales ausente después de calentar DNS: 502 no-store en 2,009 s; Customers: 502
-no-store en 2,003 s. Host /customers y assets Products responden 200 durante esas
+Sales ausente después de calentar DNS: 502 no-store en 2,010 s; Customers: 502
+no-store en 2,008 s. Host /customers y assets Products responden 200 durante esas
 caídas. Ambos recuperan assets; Customers se recupera con retry del módulo.
 No se ejecutó negocio de Sales/Products ni se certifican sus APIs.
 
