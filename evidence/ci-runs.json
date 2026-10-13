@@ -1,0 +1,16 @@
+{
+  "host": {
+    "conclusion": "success",
+    "databaseId": 38339772767,
+    "headSha": "80211842ad444c7cc0100503506ab8f835ec0d7b",
+    "status": "completed",
+    "url": "https://github.com/code-corhuila/synkro-front/actions/runs/38339772767"
+  },
+  "portal": {
+    "conclusion": "success",
+    "databaseId": 38339776551,
+    "headSha": "216e3793296e6315b5abb45cb402621ba1498563",
+    "status": "completed",
+    "url": "https://github.com/code-corhuila/synkro-customers-portal/actions/runs/38339776551"
+  }
+}

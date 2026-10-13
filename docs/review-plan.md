@@ -22,9 +22,10 @@ HU-INF-02 selecciona esos merges; aquí no se alteran pins ni ramas permanentes.
 ## Límite de revisión
 
 La regla vigente limita a 400 líneas de código por PR, excluyendo pruebas. El
-lockfile completo añade 9.279 líneas; se conserva íntegro. Antes de la documentación
-final, la entrega Portal añade aproximadamente 610 líneas de aplicación/scripts y
-configuración (incluye aceptación real de 177 líneas), además del lockfile y pruebas.
+lockfile completo añade 9.279 líneas; se conserva íntegro. La entrega Portal en
+`216e3793296e6315b5abb45cb402621ba1498563` cambia 764 líneas excluyendo pruebas,
+documentación y lockfile (incluye aceptación real de 177 líneas; 587 restantes),
+además del lockfile completo y pruebas.
 Medición reproducible: `git diff --numstat origin/develop...HEAD`.
 
 Se solicita a los revisores una excepción específica para la primera aplicación

@@ -67,7 +67,8 @@ anterior, conservando sus bundles. La prueba del publicador comprueba ambas vers
 ## Aceptación separada
 
 `node scripts/acceptance.mjs` requiere Docker y Chromium de Playwright instalado
-(`npx playwright install chromium`). Usa `HEAD` de los dos repositorios afectados
+(`npx playwright install chromium`). `CUSTOMERS_BROWSER_CHANNEL=chrome` permite
+usar Chrome instalado; se registra la versión realmente ejecutada. Usa `HEAD` de los dos repositorios afectados
 y referencias `origin/develop` actualizadas de los participantes. Registra los SHA
 y IDs de imagen realmente ejecutados. Crea PostgreSQL tmpfs, claves y usuarios
 efímeros; no usa bases compartidas. Elimina únicamente recursos propios etiquetados.
