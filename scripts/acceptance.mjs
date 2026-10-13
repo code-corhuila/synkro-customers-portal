@@ -73,13 +73,13 @@ try {
   const shellArgs=['--build-arg',`VITE_SHELL_ENTRY_URL=${origin}/assets/remoteEntry.js`];
   launch('synkro-auth-portal',build('synkro-auth-portal',shellArgs));
   const productsImage=build('synkro-products-portal',shellArgs),salesImage=build('synkro-sales-portal',[...shellArgs,'--build-arg','VITE_BASE_PATH=/remotes/sales/']);
-  const products=launch('synkro-products-portal',productsImage,{HOST_ORIGIN:origin});
+  launch('synkro-products-portal',productsImage,{HOST_ORIGIN:origin});
   const sales=launch('synkro-sales-portal',salesImage,{HOST_ORIGIN:origin});
   const hostImage=build('synkro-front',['--build-arg',`VITE_AUTH_PORTAL_ENTRY=${origin}/remotes/auth/assets/remoteEntry.js`,'--build-arg',`VITE_PRODUCTS_PORTAL_ENTRY=${origin}/remotes/products/assets/remoteEntry.js`,'--build-arg',`VITE_SALES_PORTAL_ENTRY=${origin}/remotes/sales/assets/remoteEntry.js`]);
   launch('host',hostImage,{},['--publish',`127.0.0.1:${port}:80`]);
   await wait(async()=> (await fetch(origin+'/login')).status===200);
   // API readiness is exercised by actual Auth login, not port publication.
-  browser=await chromium.launch({channel:'chromium',headless:true});context=await browser.newContext({viewport:{width:1280,height:900}});page=await context.newPage();
+  browser=await chromium.launch({channel:process.env.CUSTOMERS_BROWSER_CHANNEL || 'chromium',headless:true});result.browserVersion=browser.version();context=await browser.newContext({viewport:{width:1280,height:900}});page=await context.newPage();
   const apiErrors=[];page.on('pageerror',e=>apiErrors.push(e.message));
   async function login(email) {
     await page.getByLabel('Correo electrónico').fill(email);await page.getByLabel('Contraseña').fill(passwords.human);
