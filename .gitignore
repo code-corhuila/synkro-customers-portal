@@ -7,3 +7,10 @@ build/
 .idea/
 .DS_Store
 *.local
+.reference/
+.angular/
+coverage/
+evidence/raw/
+.acceptance/
+*.log
+audit.json
