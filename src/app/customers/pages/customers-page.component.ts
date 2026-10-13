@@ -9,7 +9,7 @@ import { blankCustomer, type Customer, type CustomerRequest, type Page } from '.
 import { displayError, type DisplayError } from '../model/errors';
 
 @Component({selector:'customers-page',imports:[FormsModule,DatePipe,CustomerFormComponent],styleUrls:['./customers.css'],template:`
-  <header class="heading"><div><h1 #heading tabindex="-1">{{title()}}</h1><p>Desactivar conserva el registro y el historial de ventas.</p></div>
+  <header class="customers-heading"><div><h1 #heading tabindex="-1">{{title()}}</h1><p>Desactivar conserva el registro y el historial de ventas.</p></div>
     <div class="actions">@if (mode === 'list') {<button class="primary" (click)="go('/new')">Nuevo cliente</button>}
       @else {<button (click)="go('')">Volver a clientes</button>}
       <button (click)="api.go('/dashboard')">Ir al inicio</button></div>
