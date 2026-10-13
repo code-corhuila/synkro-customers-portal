@@ -77,7 +77,7 @@ export class CustomersPageComponent implements OnDestroy {
   constructor() {
     this.subscription=combineLatest([this.route.data,this.route.paramMap]).subscribe(([data,params])=>{
       this.mode=data['mode']; this.id=params.get('id') || ''; this.customer.set(null); this.draft=blankCustomer();
-      this.intent=undefined; this.intentChanged.set(false); this.load();
+      this.pending.set(false); this.intent=undefined; this.intentChanged.set(false); this.load();
     });
   }
   title() { return this.mode === 'new' ? 'Registrar cliente' : this.mode === 'edit' ? 'Actualizar cliente' : this.mode === 'detail' ? 'Detalle del cliente' : 'Clientes'; }
