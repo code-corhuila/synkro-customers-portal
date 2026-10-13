@@ -1,0 +1,179 @@
+[
+  {
+    "file": "adapter-red.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "8D156310A02EC67883E97117B40EFA5EF8C02F471899AB620FEC37493CF976C1",
+    "summary": [
+      "Test Files  1 failed (1)",
+      "Tests  3 failed (3)",
+      "Start at  21:05:20"
+    ]
+  },
+  {
+    "file": "root-red.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "62607EB679ED847235F1E254C2BDE0C5B0ED89CE0B1652EE2A87D12ED7F83595",
+    "summary": [
+      "Test Files  1 failed | 1 passed (2)",
+      "Tests  3 failed | 3 passed (6)",
+      "Start at  21:06:53"
+    ]
+  },
+  {
+    "file": "views-red.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "C938DF979351A57CBC5E0EBE59EB4EF244D7D749F6976FE17A54D36A23B8804D",
+    "summary": [
+      "Test Files  2 failed | 1 passed (3)",
+      "Tests  14 failed | 3 passed (17)",
+      "Start at  21:08:45"
+    ]
+  },
+  {
+    "file": "bootstrap-red.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "DE18EE35611DC4451F25266B9AFF1B2DDAC179510F3CEEF48FD2CB5184153AFB",
+    "summary": [
+      "Test Files  2 failed | 2 passed (4)",
+      "Tests  12 failed | 6 passed (18)",
+      "Start at  21:27:10"
+    ]
+  },
+  {
+    "file": "entry-red.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "AC385E0A0D62C1821D68088637A13B1D0976AA675895BACE2E8C70FADF80A626",
+    "summary": []
+  },
+  {
+    "file": "focus-inactive-red.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "1AAE2D8B3CF5764AD998B865228CA671E9148C686E5623B09B0A9052F945C657",
+    "summary": [
+      "Test Files  2 failed | 2 passed (4)",
+      "Tests  2 failed | 18 passed (20)",
+      "Start at  21:45:46"
+    ]
+  },
+  {
+    "file": "focus-inactive-green.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "8D017A5F2A636D91DE66722ED477ED90B859FF9766704B9762324AD985118AFC",
+    "summary": [
+      "Test Files  4 passed (4)",
+      "Tests  20 passed (20)",
+      "Start at  21:49:25"
+    ]
+  },
+  {
+    "file": "assets-red.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "2E1A1166BEB4351F118A3E37A978D137613DD653937DF7F1B2129AB41B17D3C2",
+    "summary": [
+      "# pass 0",
+      "# fail 1"
+    ]
+  },
+  {
+    "file": "assets-green.log",
+    "repository": "synkro-customers-portal",
+    "sha256": "4B7186F98FC3E9FD4A288F6CAFE2047FE43D296DA1FC0DAF7021ABB311B37686",
+    "summary": [
+      "# pass 3",
+      "# fail 0"
+    ]
+  },
+  {
+    "file": "customers-contract-red.log",
+    "repository": "synkro-front",
+    "sha256": "6A7E1E828D10B868030ABD2F77F3AC5298093D3F7D66DC92401498AB68B3F25B",
+    "summary": [
+      "Test Files  1 failed (1)",
+      "Tests  1 failed | 9 passed (10)",
+      "Start at  21:04:07"
+    ]
+  },
+  {
+    "file": "customers-recovery-red.log",
+    "repository": "synkro-front",
+    "sha256": "394EADCCBF54C75213CE92F11AFABE62759F0378BFCFB93611ADA72CEC5D0D64",
+    "summary": [
+      "Test Files  3 failed (3)",
+      "Tests  4 failed | 16 passed (20)",
+      "Start at  21:31:00"
+    ]
+  },
+  {
+    "file": "customers-warm-red.log",
+    "repository": "synkro-front",
+    "sha256": "A6D25E309AEC5E66F56CDA9C984B09C43E05A4DB440DD34042E6455FC104F9BB",
+    "summary": [
+      "Test Files  1 failed (1)",
+      "Tests  1 failed | 2 passed (3)",
+      "Start at  21:39:43"
+    ]
+  },
+  {
+    "repository": "synkro-customers-portal",
+    "summary": [
+      "Test Files  1 failed | 3 passed (4)",
+      "Tests  1 failed | 20 passed (21)",
+      "Start at  22:00:07"
+    ],
+    "sha256": "76AB222CAD6BC0EFB01AEDA68202B0E91F253FC696D602F87DF45F1B03DCDB5D",
+    "file": "styles-red.log"
+  },
+  {
+    "repository": "synkro-customers-portal",
+    "summary": [
+      "Test Files  4 passed (4)",
+      "Tests  21 passed (21)",
+      "Start at  22:00:38",
+      "Statements   : 81.84% ( 487/595 )"
+    ],
+    "sha256": "85043567E20EE002BF0C063002DACD0C23CD355107FE5D49D25157D5F11B9277",
+    "file": "styles-green.log"
+  },
+  {
+    "repository": "synkro-front",
+    "summary": [
+      "Test Files  1 failed (1)",
+      "Tests  1 failed | 2 passed (3)",
+      "Start at  21:57:18"
+    ],
+    "sha256": "A51CE2294DB8FAF8BA26E599F242443BAE5FC7218743B9684B1F26953085E002",
+    "file": "customers-cache-red.log"
+  },
+  {
+    "repository": "synkro-front",
+    "summary": [
+      "Test Files  48 passed (48)",
+      "Tests  339 passed | 3 todo (342)",
+      "Start at  21:57:39",
+      "Statements   : 94.7% ( 537/567 )"
+    ],
+    "sha256": "427F825B2A170354FCCEE69A9F735C26138620AD0529EA6341ACDC6B8BEBF3D1",
+    "file": "customers-host-final-coverage.log"
+  },
+  {
+    "summary": [
+      "Test Files  1 failed | 3 passed (4)",
+      "Tests  1 failed | 21 passed (22)",
+      "Start at  22:06:50"
+    ],
+    "repository": "synkro-customers-portal",
+    "file": "route-write-red.log",
+    "sha256": "B8112BDC6534E31C11128E44F684DC504307ADE8EA9B4C5FC25EFF4435A14D35"
+  },
+  {
+    "summary": [
+      "Test Files  4 passed (4)",
+      "Tests  22 passed (22)",
+      "Start at  22:07:24",
+      "Statements   : 81.87% ( 488/596 )"
+    ],
+    "repository": "synkro-customers-portal",
+    "file": "route-write-green.log",
+    "sha256": "1E060B482783E60A75BF2E1A0F8708F57AE06618753EB9F2AE7C175B70BD4AA8"
+  }
+]
