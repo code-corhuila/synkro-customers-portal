@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json", "version": 1,
+  "newProjectRoot": "projects",
+  "projects": { "customers": { "projectType": "application", "root": "", "sourceRoot": "src",
+    "architect": {
+      "build": { "builder": "@angular/build:application", "options": {
+        "browser": "src/main.ts", "tsConfig": "tsconfig.app.json", "index": "src/index.html",
+        "outputPath": "dist/customers", "outputHashing": "all", "baseHref": "/remotes/customers/",
+        "polyfills": [], "styles": [], "assets": [], "budgets": [{"type":"initial","maximumWarning":"700kB","maximumError":"1MB"}]
+      }},
+      "serve": { "builder": "@angular/build:dev-server", "options": { "buildTarget": "customers:build" }},
+      "test": { "builder": "@angular/build:unit-test", "options": {
+        "buildTarget": "customers:build", "tsConfig": "tsconfig.spec.json", "runner": "vitest", "runnerConfig": "vitest.config.ts"
+      }}
+    }
+  }}
+}
