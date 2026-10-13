@@ -9,7 +9,7 @@ import { blankCustomer, type Customer, type CustomerRequest, type Page } from '.
 import { displayError, type DisplayError } from '../model/errors';
 
 @Component({selector:'customers-page',imports:[FormsModule,DatePipe,CustomerFormComponent],styleUrls:['./customers.css'],template:`
-  <header class="heading"><div><h1 tabindex="-1">{{title()}}</h1><p>Desactivar conserva el registro y el historial de ventas.</p></div>
+  <header class="heading"><div><h1 #heading tabindex="-1">{{title()}}</h1><p>Desactivar conserva el registro y el historial de ventas.</p></div>
     <div class="actions">@if (mode === 'list') {<button class="primary" (click)="go('/new')">Nuevo cliente</button>}
       @else {<button (click)="go('')">Volver a clientes</button>}
       <button (click)="api.go('/dashboard')">Ir al inicio</button></div>
@@ -72,6 +72,8 @@ export class CustomersPageComponent implements OnDestroy {
   private intent?:{key:string;payload:CustomerRequest};
   intentChanged = signal(false);
   @ViewChild('dialog') private dialog?:ElementRef<HTMLDialogElement>;
+  @ViewChild('heading') private heading?:ElementRef<HTMLHeadingElement>;
+  ngAfterViewInit() {this.heading?.nativeElement.focus();}
   constructor() {
     this.subscription=combineLatest([this.route.data,this.route.paramMap]).subscribe(([data,params])=>{
       this.mode=data['mode']; this.id=params.get('id') || ''; this.customer.set(null); this.draft=blankCustomer();
@@ -112,7 +114,7 @@ export class CustomersPageComponent implements OnDestroy {
     this.pending.set(true); this.error.set(null); const generation=this.generation;
     const request=this.mode === 'new' ? this.api.create(this.intent!.payload,this.intent!.key) : this.api.update(this.id,normalized);
     void request.then(c=>{if (!this.destroyed && generation === this.generation) {this.notice.set(this.mode === 'new'?'Cliente registrado.':'Cliente actualizado.'); this.api.go('/customers/'+c.customerId);}})
-      .catch(e=>{if (!this.destroyed && generation === this.generation) this.error.set(displayError(e));})
+      .catch(e=>{if (!this.destroyed && generation === this.generation) {const error=displayError(e);this.error.set(error);if (error.status === 404 && this.mode === 'edit') this.customer.set(null);}})
       .finally(()=>{if (!this.destroyed && generation === this.generation) this.pending.set(false);});
   }
   confirm(c:Customer,event:Event) {this.selected.set(c); this.deleteError.set(null); this.returnFocus=event.currentTarget as HTMLElement; this.dialog?.nativeElement.showModal();}

@@ -109,6 +109,11 @@ describe('CLI-UI-08/09/10/13 detail and writes',()=>{
     expect(request.mock.calls[1].slice(0,2)).toEqual(['PUT','/api/v1/customers/a']);
     expect(request.mock.calls[1][2].body).toEqual({name:'Ana',identityDocument:'DOC',email:null,phone:null,address:null});
   });
+  it('removes the update form if the server reports that the customer became inactive',async()=>{
+    const request=vi.fn().mockResolvedValueOnce(customer).mockRejectedValue({status:404,body:{traceId:'became-inactive'}});
+    const {fixture,el}=await setup('edit',request);await click(fixture,'Guardar cambios');
+    expect(el.textContent).toContain('no encontrado o inactivo');expect(el.querySelector('customer-form')).toBeNull();
+  });
   it('requires a keyboard-accessible confirmation before logical deactivation',async()=>{
     vi.spyOn(HTMLDialogElement.prototype,'showModal').mockImplementation(function(this:HTMLDialogElement){this.setAttribute('open','');});
     vi.spyOn(HTMLDialogElement.prototype,'close').mockImplementation(function(this:HTMLDialogElement){this.removeAttribute('open');});

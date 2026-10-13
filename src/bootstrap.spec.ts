@@ -22,4 +22,13 @@ describe('CLI-UI-01/12/13 real custom element',()=>{
     history.replaceState(null,'','/customers'); element.shellContract={...shell};
     await vi.waitFor(()=>expect(request).toHaveBeenCalledTimes(2)); element.remove();
   });
+  it('shows an owned unknown route without requests, and focuses the heading on a new screen',async()=>{
+    await registerPortal();history.replaceState(null,'','/customers/unknown/inner/path');
+    const request=vi.fn();const shell:ShellContract={contractVersion:1,basePath:'/customers',api:{request},session:{user:()=>({sub:'person',role:'ADMIN'})},navigate:vi.fn()};
+    const element=document.createElement('synkro-customers-portal') as HTMLElement & {shellContract:ShellContract};element.shellContract=shell;document.body.append(element);
+    await vi.waitFor(()=>expect(element.textContent).toContain('Página no encontrada'));expect(request).not.toHaveBeenCalled();
+    history.replaceState(null,'','/customers/new');element.shellContract={...shell};
+    await vi.waitFor(()=>expect(element.querySelector('customer-form')).not.toBeNull());
+    expect(document.activeElement).toBe(element.querySelector('h1'));element.remove();
+  });
 });
