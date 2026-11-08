@@ -43,6 +43,7 @@ Documentación de entrega:
 - [TDD y limitaciones acreditadas](docs/tdd-evidence.md).
 - [Contrato operativo e infraestructura](docs/infrastructure-handoff.md).
 - [Títulos, descripciones, secuencia y excepción de tamaño para revisión](docs/review-plan.md).
+- [HU-CLI-05: contactos obligatorios, búsqueda y reactivación](docs/hu-cli-05-portal.md).
 
 La aceptación de navegador usa servicios reales y recursos desechables; se ejecuta
 separadamente mediante `node scripts/acceptance.mjs`. No usa dobles de API para
