@@ -36,6 +36,24 @@ La autorización real está en la API (ruta y caso de uso); el portal solo decid
 ## Verificación
 
 `npm test` (56 pruebas: servicio, validación, formulario, búsqueda, reactivación, accesibilidad básica y cancelación),
-`npm run typecheck`, `npm run lint`, `npm run coverage` y `npm run build` pasan en local. La aceptación en navegador con
-servicios reales (`node scripts/acceptance.mjs`) **no** se ejecutó en este trabajo: queda pendiente la verificación
-conjunta con el Host, la API y la base de datos de esta HU (y con el portal de Ventas de HU-VEN-20).
+`npm run typecheck`, `npm run lint`, `npm run coverage` y `npm run build` pasan en local.
+
+### Aceptación en navegador con servicios reales (solo Clientes)
+
+`node scripts/acceptance.mjs` (Microsoft Edge de Playwright, Host `synkro-front`, Gateway, Auth, API de Clientes y PostgreSQL
+desechable; ningún doble de respuesta de API) pasa, con las revisiones y las imágenes exactas en `evidence/browser-result.json`.
+Para esta HU comprueba, además de los flujos previos:
+
+- alta y edición con contactos obligatorios: errores por campo, foco en el primer campo inválido y **ninguna** petición cuando
+  el formulario es inválido; la API rechaza por su cuenta correo/teléfono/dirección inválidos con `400` sin escribir nada;
+- búsqueda: validación 2–100 antes de enviar, sin tildes ni mayúsculas, documento exacto primero, máximo 5 con el aviso de
+  que hay más, estados vacío / cargando / error con referencia y reintento, **respuesta tardía descartada**, texto solo en
+  el cuerpo del POST (no en URL, consola ni logs de los participantes) y teclado (Tab, Enter);
+- reactivación como ADMIN: diálogo con foco, Escape devuelve el foco, una fila de auditoría y repetición idempotente;
+- SALESPERSON: sin control de reactivar ni selector de estado; la API responde `403` también con cabeceras falsificadas,
+  para INVENTORY y `401` sin token; `PUT` sobre un inactivo sigue siendo `404`;
+- el mismo flujo contra `http://localhost` y `http://127.0.0.1` (la sonda de `127.0.0.1` inicia sesión y busca).
+
+Límites: es **solo Clientes**. La integración conjunta con el portal de Ventas (HU-VEN-20) sigue **pendiente** y requiere la
+revisión concreta de Sergio. El Gateway limita el inicio de sesión (5 rápidos y luego 1 por minuto), por eso el script espera
+65 s antes de los inicios de sesión sexto y séptimo; no se modificó el Gateway.
