@@ -99,12 +99,23 @@ describe('CLI-UI-06/07 creation',()=>{
     await click(fixture,'Iniciar un registro diferente'); await click(fixture,'Registrar cliente');
     expect(request).toHaveBeenCalledTimes(2); expect(request.mock.calls[1][2].idempotencyKey).not.toBe(request.mock.calls[0][2].idempotencyKey);
   });
-  it('attaches duplicate document errors to the field without logging out or retrying',async()=>{
-    const request=vi.fn().mockRejectedValue({status:422,body:{traceId:'duplicate',details:[{field:'identityDocument',message:'Identity document already exists'}]}});
+  it('attaches the real duplicate-document envelope of the API to the field without logging out or retrying',async()=>{
+    // Exact body observed from the real API (BUSINESS_RULE_VIOLATION, JdbcCustomerRepository): not a message invented for the test.
+    const envelope={error:'BUSINESS_RULE_VIOLATION',message:'Identity document already belongs to a customer',
+      details:[{field:'identityDocument',message:'Identity document already belongs to a customer'}],traceId:'4f1c2b7e-8a3d-4e21-9b6f-0c5d7a2e1f90'};
+    const request=vi.fn().mockRejectedValue({status:422,body:envelope});
     const {fixture,el}=await setup('new',request); await fillCustomer(fixture); await click(fixture,'Registrar cliente');
-    const error=el.querySelector('#error-identityDocument'); expect(error?.textContent).toContain('registrado');
+    const error=el.querySelector('#error-identityDocument'); expect(error?.textContent).toContain('Este documento ya está registrado, incluso si el cliente está inactivo.');
     expect(el.querySelector('[name="identityDocument"]')?.getAttribute('aria-describedby')).toContain('error-identityDocument');
+    expect(el.textContent).not.toContain('already belongs');   // the server wording is never shown
     expect(request).toHaveBeenCalledTimes(1);
+  });
+  it('keeps the generic field message for other server rejections of the document',async()=>{
+    const request=vi.fn().mockRejectedValue({status:400,body:{error:'VALIDATION_ERROR',message:'Invalid request fields',
+      details:[{field:'identityDocument',message:'Invalid field value'}],traceId:'t'}});
+    const {fixture,el}=await setup('new',request); await fillCustomer(fixture); await click(fixture,'Registrar cliente');
+    expect(el.querySelector('#error-identityDocument')?.textContent).toContain('Revisa este campo: el servidor rechazó su valor.');
+    expect(el.querySelector('#error-identityDocument')?.textContent).not.toContain('ya está registrado');
   });
 });
 describe('CLI-UI-08/09/10/13 detail and writes',()=>{
