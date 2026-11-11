@@ -12,7 +12,8 @@
     "test": "ng test --watch=false",
     "coverage": "ng test --watch=false --coverage",
     "typecheck": "ngc -p tsconfig.app.json --noEmit",
-    "lint": "oxlint src scripts && node scripts/check-boundary.mjs"
+    "lint": "oxlint src scripts && node scripts/check-boundary.mjs",
+    "test:contract": "npm ci --prefix tests/pact && vitest run --config tests/pact/vitest.config.ts"
   },
   "dependencies": {
     "@angular/common": "21.2.25",
