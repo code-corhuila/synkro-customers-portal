@@ -16,3 +16,5 @@ button:disabled { opacity:.6; cursor:wait; } button:focus-visible,input:focus-vi
 dl { display:grid; grid-template-columns:max-content 1fr; gap:var(--space-3) var(--space-6); } dd { margin:0; overflow-wrap:anywhere; } dt { font-weight:var(--font-weight-medium); }
 dialog { background:var(--color-bg-card); color:var(--color-text-primary); border:1px solid var(--color-text-secondary); border-radius:var(--radius-lg); max-width:min(90vw,36rem); padding:var(--space-6); box-shadow:var(--shadow-lg); } dialog::backdrop { background:var(--color-bg-overlay); }
 @media(max-width:640px) { .card { padding:var(--space-4); } .toolbar>* { width:100%; } dl { grid-template-columns:1fr; gap:var(--space-2); } dd { margin-bottom:var(--space-3); } }
+.hint { margin:0; font-size:var(--font-size-sm); color:var(--color-text-secondary); } .notice { background:var(--color-warning-50); color:var(--color-warning-700); padding:var(--space-3) var(--space-4); border-radius:var(--radius-md); margin:0 0 var(--space-4); }
+.grow { flex:1 1 18rem; margin-bottom:0; } .search-results { margin-bottom:var(--space-6); }

@@ -8,7 +8,7 @@ import { CustomersApiService } from '../data/customers-api.service';
 import type { ShellContract } from '../../shell-contract';
 import type { Customer } from '../model/customer';
 
-const customer:Customer={customerId:'a',name:'Ana',identityDocument:'DOC',email:null,phone:null,address:null,registrationDate:'2026-10-12T15:00:00Z',active:true};
+const customer:Customer={customerId:'a',name:'Ana',identityDocument:'DOC',email:'ana@example.test',phone:'3001234567',address:'Calle 1 # 2-3',registrationDate:'2026-10-12T15:00:00Z',active:true};
 const page=(rows=[customer])=>({data:rows,meta:{page:1,limit:20,total:rows.length,totalPages:rows.length?1:0}});
 beforeEach(()=>{
   Object.defineProperty(HTMLDialogElement.prototype,'showModal',{configurable:true,value:vi.fn(function(this:HTMLDialogElement){this.setAttribute('open','');})});
@@ -18,10 +18,10 @@ async function settle(f:ComponentFixture<CustomersPageComponent>) {
   for(let i=0;i<6;i++) await Promise.resolve();
   await f.whenStable(); f.detectChanges();
 }
-async function setup(mode='list',request=vi.fn().mockResolvedValue(page())) {
+async function setup(mode='list',request=vi.fn().mockResolvedValue(page()),role:'ADMIN'|'SALESPERSON'='ADMIN') {
   TestBed.configureTestingModule({imports:[CustomersPageComponent],providers:[CustomersApiService,
     {provide:ActivatedRoute,useValue:{data:new BehaviorSubject({mode}),paramMap:new BehaviorSubject(convertToParamMap({id:'a'}))}}]});
-  const shell:ShellContract={contractVersion:1,basePath:'/customers',api:{request},session:{user:()=>({sub:'person',role:'ADMIN'})},navigate:vi.fn()};
+  const shell:ShellContract={contractVersion:1,basePath:'/customers',api:{request},session:{user:()=>({sub:'person',role})},navigate:vi.fn()};
   TestBed.inject(CustomersApiService).setContract(shell);
   const fixture=TestBed.createComponent(CustomersPageComponent); fixture.detectChanges(); await settle(fixture);
   return {fixture,shell,request,el:fixture.nativeElement as HTMLElement};
@@ -30,6 +30,10 @@ async function input(f:ComponentFixture<CustomersPageComponent>,name:string,valu
   const el=f.nativeElement.querySelector(`[name="${name}"]`) as HTMLInputElement;
   expect(el,`input ${name}`).not.toBeNull(); el.value=value;
   el.dispatchEvent(new Event(el.tagName==='SELECT'?'change':'input',{bubbles:true})); f.detectChanges(); await settle(f);
+}
+async function fillCustomer(f:ComponentFixture<CustomersPageComponent>,overrides:Record<string,string>={}) {
+  const values={name:'Ana',identityDocument:'DOC',email:'ana@example.test',phone:'3001234567',address:'Calle 1 # 2-3',...overrides};
+  for (const [name,value] of Object.entries(values)) await input(f,name,value);
 }
 async function click(f:ComponentFixture<CustomersPageComponent>,text:string) {
   const button=[...f.nativeElement.querySelectorAll('button')].find((b:unknown)=>(b as HTMLElement).textContent?.trim()===text) as HTMLButtonElement;
@@ -78,7 +82,7 @@ describe('CLI-UI-06/07 creation',()=>{
     let reject!:(e:unknown)=>void;
     const request=vi.fn().mockImplementationOnce(()=>new Promise((_,r)=>reject=r)).mockResolvedValue(customer);
     const {fixture,el,shell}=await setup('new',request);
-    await input(fixture,'name','Ana'); await input(fixture,'identityDocument','DOC'); await click(fixture,'Registrar cliente');
+    await fillCustomer(fixture); await click(fixture,'Registrar cliente');
     expect((el.querySelector('button[type="submit"]') as HTMLButtonElement).disabled).toBe(true);
     reject({status:0,body:{error:'TIMEOUT',traceId:'uncertain'}}); await settle(fixture);
     await click(fixture,'Reintentar registro');
@@ -89,18 +93,29 @@ describe('CLI-UI-06/07 creation',()=>{
   });
   it('requires explicit new intent after editing an uncertain payload',async()=>{
     const request=vi.fn().mockRejectedValue({status:500,body:{traceId:'t'}});
-    const {fixture,el}=await setup('new',request); await input(fixture,'name','Ana'); await input(fixture,'identityDocument','DOC'); await click(fixture,'Registrar cliente');
+    const {fixture,el}=await setup('new',request); await fillCustomer(fixture); await click(fixture,'Registrar cliente');
     await input(fixture,'name','Otra'); await click(fixture,'Registrar cliente'); expect(request).toHaveBeenCalledTimes(1);
     expect(el.textContent).toContain('pudo haberse registrado');
     await click(fixture,'Iniciar un registro diferente'); await click(fixture,'Registrar cliente');
     expect(request).toHaveBeenCalledTimes(2); expect(request.mock.calls[1][2].idempotencyKey).not.toBe(request.mock.calls[0][2].idempotencyKey);
   });
-  it('attaches duplicate document errors to the field without logging out or retrying',async()=>{
-    const request=vi.fn().mockRejectedValue({status:422,body:{traceId:'duplicate',details:[{field:'identityDocument',message:'Identity document already exists'}]}});
-    const {fixture,el}=await setup('new',request); await input(fixture,'name','Ana'); await input(fixture,'identityDocument','DOC'); await click(fixture,'Registrar cliente');
-    const error=el.querySelector('#error-identityDocument'); expect(error?.textContent).toContain('registrado');
+  it('attaches the real duplicate-document envelope of the API to the field without logging out or retrying',async()=>{
+    // Exact body observed from the real API (BUSINESS_RULE_VIOLATION, JdbcCustomerRepository): not a message invented for the test.
+    const envelope={error:'BUSINESS_RULE_VIOLATION',message:'Identity document already belongs to a customer',
+      details:[{field:'identityDocument',message:'Identity document already belongs to a customer'}],traceId:'4f1c2b7e-8a3d-4e21-9b6f-0c5d7a2e1f90'};
+    const request=vi.fn().mockRejectedValue({status:422,body:envelope});
+    const {fixture,el}=await setup('new',request); await fillCustomer(fixture); await click(fixture,'Registrar cliente');
+    const error=el.querySelector('#error-identityDocument'); expect(error?.textContent).toContain('Este documento ya está registrado, incluso si el cliente está inactivo.');
     expect(el.querySelector('[name="identityDocument"]')?.getAttribute('aria-describedby')).toContain('error-identityDocument');
+    expect(el.textContent).not.toContain('already belongs');   // the server wording is never shown
     expect(request).toHaveBeenCalledTimes(1);
+  });
+  it('keeps the generic field message for other server rejections of the document',async()=>{
+    const request=vi.fn().mockRejectedValue({status:400,body:{error:'VALIDATION_ERROR',message:'Invalid request fields',
+      details:[{field:'identityDocument',message:'Invalid field value'}],traceId:'t'}});
+    const {fixture,el}=await setup('new',request); await fillCustomer(fixture); await click(fixture,'Registrar cliente');
+    expect(el.querySelector('#error-identityDocument')?.textContent).toContain('Revisa este campo: el servidor rechazó su valor.');
+    expect(el.querySelector('#error-identityDocument')?.textContent).not.toContain('ya está registrado');
   });
 });
 describe('CLI-UI-08/09/10/13 detail and writes',()=>{
@@ -108,11 +123,11 @@ describe('CLI-UI-08/09/10/13 detail and writes',()=>{
     const {fixture,el,shell}=await setup('detail',vi.fn().mockRejectedValue({status:404,body:{traceId:'missing'}}));
     expect(el.textContent).toContain('no encontrado o inactivo'); await click(fixture,'Volver a clientes'); expect(shell.navigate).toHaveBeenCalledWith('/customers');
   });
-  it('replaces optional fields with null and never sends immutable response fields',async()=>{
+  it('sends the complete replacement with the typed contacts and never the immutable response fields',async()=>{
     const request=vi.fn().mockResolvedValueOnce({...customer,email:'old@example.com'}).mockResolvedValue(customer);
-    const {fixture}=await setup('edit',request); await input(fixture,'email',''); await click(fixture,'Guardar cambios');
+    const {fixture}=await setup('edit',request); await input(fixture,'email','nuevo@example.test'); await click(fixture,'Guardar cambios');
     expect(request.mock.calls[1].slice(0,2)).toEqual(['PUT','/api/v1/customers/a']);
-    expect(request.mock.calls[1][2].body).toEqual({name:'Ana',identityDocument:'DOC',email:null,phone:null,address:null});
+    expect(request.mock.calls[1][2].body).toEqual({name:'Ana',identityDocument:'DOC',email:'nuevo@example.test',phone:'3001234567',address:'Calle 1 # 2-3'});
   });
   it('removes the update form if the server reports that the customer became inactive',async()=>{
     const request=vi.fn().mockResolvedValueOnce(customer).mockRejectedValue({status:404,body:{traceId:'became-inactive'}});
