@@ -3,9 +3,12 @@ import { MESSAGES } from './validation';
 export interface DisplayError { message:string; traceId:string; fields:FieldErrors; uncertain:boolean; status:number }
 
 const FIELDS = ['name','identityDocument','email','phone','address'];
+/** The only message the API sends for a duplicate document: `422 BUSINESS_RULE_VIOLATION` on `identityDocument`
+ *  (JdbcCustomerRepository, "Identity document already belongs to a customer"). It is matched as the API emits it, never shown. */
+const DUPLICATE_DOCUMENT = /already belongs to a customer/i;
 /** Field-level detail of a server rejection: the closed vocabulary of the API (`required`, `invalid_format`, `too_long`). */
 function fieldMessage(field:string, detail:string):string {
-  if (field === 'identityDocument' && /exist|unique|registered|duplicate/i.test(detail)) return 'Este documento ya está registrado, incluso si el cliente está inactivo.';
+  if (field === 'identityDocument' && DUPLICATE_DOCUMENT.test(detail)) return 'Este documento ya está registrado, incluso si el cliente está inactivo.';
   if (/required/i.test(detail)) return MESSAGES.required;
   if (/too_long|length/i.test(detail)) return MESSAGES.long;
   if (field === 'email') return MESSAGES.email;
