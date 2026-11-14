@@ -43,7 +43,18 @@ Documentación de entrega:
 - [TDD y limitaciones acreditadas](docs/tdd-evidence.md).
 - [Contrato operativo e infraestructura](docs/infrastructure-handoff.md).
 - [Títulos, descripciones, secuencia y excepción de tamaño para revisión](docs/review-plan.md).
+- [HU-CLI-05: contactos obligatorios, búsqueda y reactivación](docs/hu-cli-05-portal.md).
 
 La aceptación de navegador usa servicios reales y recursos desechables; se ejecuta
 separadamente mediante `node scripts/acceptance.mjs`. No usa dobles de API para
 certificar integración. Ningún PR, merge o cierre de issue forma parte de esta entrega.
+
+### Consumer contract verification
+
+Run `npm ci && npm run test:contract` with Node 22. The isolated test tooling
+pins Pact JS in `tests/pact/package-lock.json`; application dependencies and
+production images do not include it. Tests call the real portal client through
+the Host transport boundary and generate the committed `tests/pact/pacts/`
+artifacts. CI rejects stale artifacts. Providers verify these files against
+their real disposable databases; consumer mock success alone is not provider
+acceptance. No Pact broker or published verification result is implied.

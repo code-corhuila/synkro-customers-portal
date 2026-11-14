@@ -25,13 +25,45 @@ describe('CLI-UI-11/13 Host adapter', () => {
     expect(pendingSignal.aborted).toBe(true);
   });
   it('uses exact CRUD methods, complete replacement and explicit idempotency key', async () => {
-    const body = {...blankCustomer(),name:'Cliente',identityDocument:'123'};
+    const body = {...blankCustomer(),name:'Cliente',identityDocument:'123',email:'c@example.test',phone:'3001234567',address:'Calle 1'};
     await service.get('id'); await service.create(body,'stable-key'); await service.update('id',body); await service.deactivate('id');
     expect(vi.mocked(shell.api.request).mock.calls.map(c=>c.slice(0,2))).toEqual([
       ['GET','/api/v1/customers/id'], ['POST','/api/v1/customers'], ['PUT','/api/v1/customers/id'], ['DELETE','/api/v1/customers/id']
     ]);
     expect(vi.mocked(shell.api.request).mock.calls[1][2]).toMatchObject({body,idempotencyKey:'stable-key'});
     expect(vi.mocked(shell.api.request).mock.calls[2][2]).toMatchObject({body});
+  });
+  it('HU-CLI-05: sends the search text in the POST body, never in the URL or query string', async () => {
+    await service.search({query: 'ana pérez', status: 'ACTIVE'});
+    const [method, path, options] = vi.mocked(shell.api.request).mock.calls[0];
+    expect([method, path]).toEqual(['POST', '/api/v1/customers/search']);
+    expect(options).toMatchObject({body: {query: 'ana pérez', status: 'ACTIVE'}, signal: expect.any(AbortSignal)});
+    expect(options!.query).toBeUndefined();
+    expect(options!.idempotencyKey).toBeUndefined();   // a read-only operation
+    expect(path).not.toContain('ana');
+  });
+  it('HU-CLI-05: a new search aborts the previous one, and cancel() aborts the pending search', async () => {
+    vi.mocked(shell.api.request).mockImplementation(() => new Promise(() => {}));
+    void service.search({query: 'an', status: 'ACTIVE'});
+    const first = vi.mocked(shell.api.request).mock.calls[0][2]!.signal!;
+    void service.search({query: 'ana', status: 'ACTIVE'});
+    const second = vi.mocked(shell.api.request).mock.calls[1][2]!.signal!;
+    expect(first.aborted).toBe(true); expect(second.aborted).toBe(false);
+    service.cancel(); expect(second.aborted).toBe(true);
+  });
+  it('HU-CLI-05: reactivation is an explicit POST transition without body or idempotency key', async () => {
+    await service.activate('a/b id');
+    const [method, path, options] = vi.mocked(shell.api.request).mock.calls[0];
+    expect([method, path]).toEqual(['POST', '/api/v1/customers/a%2Fb%20id/activate']);
+    expect(options!.body).toBeUndefined(); expect(options!.idempotencyKey).toBeUndefined();
+  });
+  it('HU-CLI-05: only a human ADMIN session can reactivate', () => {
+    for (const [role, allowed] of [['ADMIN', true], ['SALESPERSON', false], ['INVENTORY', false]] as const) {
+      service.setContract({...shell, session: {user: () => ({sub: 'person', role})}});
+      expect(service.canReactivate(), role).toBe(allowed);
+    }
+    service.setContract({...shell, session: {user: () => null}});
+    expect(service.canReactivate()).toBe(false);
   });
   it('retains Host status/body, never retries 403 and permits cancellation of pending writes', async () => {
     const error = {status:403,body:{message:'denied',traceId:'trace'}};

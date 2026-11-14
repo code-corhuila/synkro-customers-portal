@@ -45,3 +45,21 @@ jobs:
           path: |
             coverage/
             dist/customers/browser/
+
+  consumer-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run test:contract
+      - name: Verify committed consumer artifacts are current
+        run: git diff --exit-code -- tests/pact/pacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: consumer-pacts-${{ github.sha }}
+          path: tests/pact/pacts/*.json
